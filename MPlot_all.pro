@@ -1,7 +1,8 @@
 TEMPLATE = subdirs
 
 SUBDIRS = MPlotLib \
-            MPlotTest
+            MPlotTest \
+    Examples
 
 CONFIG += ordered
 

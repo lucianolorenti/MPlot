@@ -5,6 +5,7 @@
 #-------------------------------------------------
 
 TEMPLATE = app
+QT+=widgets printsupport
 TARGET = MPlotTest
 DEPENDPATH += . \
 	src \

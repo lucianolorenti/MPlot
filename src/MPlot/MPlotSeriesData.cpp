@@ -43,65 +43,7 @@ QRectF MPlotAbstractSeriesData::boundingRect() const {
 	return cachedDataRect_;
 }
 
-qreal MPlotAbstractSeriesData::searchMinY() const {
 
-	int size = count();
-	QVector<qreal> y = QVector<qreal>(size);
-	yValues(0, unsigned(size)-1, y.data());
-
-	qreal extreme = y.at(0);
-
-	for (int i = 1; i < size; i++)
-		if (y.at(i) < extreme)
-			extreme = y.at(i);
-
-	return extreme;
-}
-
-qreal MPlotAbstractSeriesData::searchMaxY() const {
-
-	int size = count();
-	QVector<qreal> y = QVector<qreal>(size);
-	yValues(0, unsigned(size)-1, y.data());
-
-	qreal extreme = y.at(0);
-
-	for (int i = 1; i < size; i++)
-		if (y.at(i) > extreme)
-			extreme = y.at(i);
-
-	return extreme;
-}
-
-qreal MPlotAbstractSeriesData::searchMinX() const {
-
-	int size = count();
-	QVector<qreal> x = QVector<qreal>(size);
-	xValues(0, unsigned(size)-1, x.data());
-
-	qreal extreme = x.at(0);
-
-	for (int i = 1; i < size; i++)
-		if (x.at(i) < extreme)
-			extreme = x.at(i);
-
-	return extreme;
-}
-
-qreal MPlotAbstractSeriesData::searchMaxX() const {
-
-	int size = count();
-	QVector<qreal> x = QVector<qreal>(size);
-	xValues(0, unsigned(size)-1, x.data());
-
-	qreal extreme = x.at(0);
-
-	for (int i = 1; i < size; i++)
-		if (x.at(i) > extreme)
-			extreme = x.at(i);
-
-	return extreme;
-}
 
 MPlotRealtimeModel::MPlotRealtimeModel(QObject *parent) :
 		QAbstractTableModel(parent), MPlotAbstractSeriesData(), xName_("x"), yName_("y")
@@ -135,7 +77,15 @@ qreal MPlotRealtimeModel::y(unsigned index) const {
 	if(index<(unsigned)yval_.count())
 		return yval_.at(index);
 	else
-		return 0.0;
+        return 0.0;
+}
+
+void MPlotRealtimeModel::xyValues(unsigned indexStart, unsigned indexEnd, QVector<qreal> &outputValuesX, QVector<qreal> &outputValuesY) const
+{
+    for(unsigned i=indexStart; i<=indexEnd; ++i) {
+        outputValuesX[i] = xval_[i];
+        outputValuesY[i] = yval_[i];
+    }
 }
 
 
@@ -438,7 +388,28 @@ qreal MPlotRealtimeModel::minX() const {
 }
 
 qreal MPlotRealtimeModel::maxX() const {
-	return xval_.at(maxXIndex_);
+    return xval_.at(maxXIndex_);
+}
+
+qreal MPlotRealtimeModel::searchMinY() const
+{
+ return *std::min(yval_.begin(),yval_.end());
+}
+
+qreal MPlotRealtimeModel::searchMaxY() const
+{
+
+    return *std::max(yval_.begin(),yval_.end());
+}
+
+qreal MPlotRealtimeModel::searchMinX() const
+{
+    return *std::min(xval_.begin(),xval_.end());
+}
+
+qreal MPlotRealtimeModel::searchMaxX() const
+{
+    return *std::max(xval_.begin(),xval_.end());
 }
 
 bool MPlotVectorSeriesData::setValues(const QVector<qreal> &xValues, const QVector<qreal> &yValues)
@@ -477,17 +448,7 @@ MPlotVectorSeriesData::MPlotVectorSeriesData()
 {
 }
 
-void MPlotRealtimeModel::xValues(unsigned indexStart, unsigned indexEnd, qreal *outputValues) const
-{
-	for(unsigned i=indexStart; i<=indexEnd; ++i)
-		*(outputValues++) = xval_.at(i);
-}
 
-void MPlotRealtimeModel::yValues(unsigned indexStart, unsigned indexEnd, qreal *outputValues) const
-{
-	for(unsigned i=indexStart; i<=indexEnd; ++i)
-		*(outputValues++) = yval_.at(i);
-}
 
 
 #endif

@@ -6,7 +6,7 @@
 
 TARGET = MPlot
 TEMPLATE = lib
-
+QT +=widgets
 DEFINES += MPLOT_LIBRARY
 
 INCLUDEPATH += src

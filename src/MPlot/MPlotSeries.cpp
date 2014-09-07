@@ -108,27 +108,21 @@ void MPlotAbstractSeries::setModel(const MPlotAbstractSeriesData* data, bool own
 
 const MPlotAbstractSeriesData* MPlotAbstractSeries::model() const { return data_; }
 
-void MPlotAbstractSeries::xxValues(unsigned start, unsigned end, qreal *outputValues) const
+void MPlotAbstractSeries::xxyyValues(unsigned start, unsigned end, QVector<qreal> &outputValuesX,QVector<qreal> &outputValuesY) const
 {
 	qreal offset = offset_.x();
 	int size = end-start+1;
-	QVector<qreal> x = QVector<qreal>(size);
-	data_->xValues(start, end, x.data());
 
-	for (int i = 0; i < size; i++)
-		outputValues[i] = x.at(i)*sx_ + dx_ + offset;
+    data_->xyValues(start, end, outputValuesX,outputValuesY);
+
+
+    for (int i = 0; i < size; i++) {
+        outputValuesX[i] = outputValuesX[i]*sx_ + dx_ + offset;
+        outputValuesY[i] = outputValuesY[i]*sy_ + dy_ + offset;
+    }
 }
 
-void MPlotAbstractSeries::yyValues(unsigned start, unsigned end, qreal *outputValues) const
-{
-	qreal offset = offset_.y();
-	int size = end-start+1;
-	QVector<qreal> y = QVector<qreal>(size);
-	data_->yValues(start, end, y.data());
 
-	for (int i = 0; i < size; i++)
-		outputValues[i] = y.at(i)*sy_ + dy_ + offset;
-}
 
 // Required functions:
 //////////////////////////
@@ -186,11 +180,12 @@ QPainterPath MPlotAbstractSeries::shape() const {
 	else if (data_ && data_->count() > 0){
 
 		int dataCount = data_->count();
+
 		QVector<qreal> x = QVector<qreal>(dataCount);
 		QVector<qreal> y = QVector<qreal>(dataCount);
 
-		xxValues(0, dataCount-1, x.data());
-		yyValues(0, dataCount-1, y.data());
+        xxyyValues(0, dataCount-1, x,y);
+
 
 		QVector<qreal> mappedX = QVector<qreal>(dataCount);
 		QVector<qreal> mappedY = QVector<qreal>(dataCount);
@@ -370,8 +365,8 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
 		QVector<qreal> x = QVector<qreal>(dataCount);
 		QVector<qreal> y = QVector<qreal>(dataCount);
 
-		xxValues(0, dataCount-1, x.data());
-		yyValues(0, dataCount-1, y.data());
+        xxyyValues(0, dataCount-1, x,y);
+
 
 		QVector<qreal> mappedX = QVector<qreal>(dataCount);
 		QVector<qreal> mappedY = QVector<qreal>(dataCount);
@@ -435,8 +430,8 @@ void MPlotSeriesBasic::paintMarkers(QPainter* painter) {
 		QVector<qreal> x = QVector<qreal>(dataCount);
 		QVector<qreal> y = QVector<qreal>(dataCount);
 
-		xxValues(0, dataCount-1, x.data());
-		yyValues(0, dataCount-1, y.data());
+        xxyyValues(0, dataCount-1, x,y);
+
 
 		QVector<qreal> mappedX = QVector<qreal>(dataCount);
 		QVector<qreal> mappedY = QVector<qreal>(dataCount);

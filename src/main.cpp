@@ -100,8 +100,10 @@
 	 }
 
 	 MPlotImageBasic* plot2d = new MPlotImageBasic(&data2d);
-	 plot2d->setColorMap(MPlotColorMap::Jet);	//This should be the default color map.
+     plot2d->setColorMap(MPlotColorMap::Jet);
 	 plot.addItem(plot2d);
+
+
 
 
 	 // 3. Add data. Data is contained in the first two columns of an MPlotSeriesData:

@@ -2,7 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QVector>
+#include <cstdint>
+#include <MPlot/MPlot.h>
 namespace Ui {
 class MainWindow;
 }
@@ -18,6 +20,7 @@ public:
 private:
     Ui::MainWindow *ui;
     void configurePlot(MPlot *plot);
+    QVector<QVector<uint16_t>> _datos;
 };
 
 #endif // MAINWINDOW_H

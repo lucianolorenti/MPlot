@@ -11,10 +11,13 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Examples
 TEMPLATE = app
 
-INCLUDEPATH+= ../src/MPlot/
+INCLUDEPATH+= ../src/
+QMAKE_CXXFLAGS=-std=c++11
 SOURCES += main.cpp\
         mainwindow.cpp
 
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+LIBS+= -L$${PWD}/../lib -lMPlot

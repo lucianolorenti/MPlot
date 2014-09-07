@@ -9,7 +9,7 @@ TEMPLATE = lib
 QT +=widgets
 DEFINES += MPLOT_LIBRARY
 
-INCLUDEPATH += src
+INCLUDEPATH += $${PWD}/src
 
 HEADERS += src/MPlot/MPlot_global.h \
 		src/MPlot/MPlotWidget.h \

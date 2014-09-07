@@ -132,7 +132,7 @@ template <class T>
 class MPLOTSHARED_EXPORT MPlotVectorRefSeriesData : public MPlotAbstractSeriesData {
 
 protected:
-    QVector<T> & _yValues;
+    const QVector<T> & _yValues;
 
     // MPlotAbstractSeriesData interface
 public:
@@ -182,7 +182,26 @@ int MPlotVectorRefSeriesData<T>::count() const
 {
     return _yValues.size();
 }
-
+template <class T>
+qreal MPlotVectorRefSeriesData<T>::searchMinY() const
+{
+    return *std::min(_yValues.begin(),_yValues.end());
+}
+template <class T>
+qreal MPlotVectorRefSeriesData<T>::searchMaxY() const
+{
+    return *std::max(_yValues.begin(),_yValues.end());
+}
+template <class T>
+qreal MPlotVectorRefSeriesData<T>::searchMinX() const
+{
+    return 0;
+}
+template <class T>
+qreal MPlotVectorRefSeriesData<T>::searchMaxX() const
+{
+    return _yValues.count();
+}
 
 /// This class provides a Qt TableModel implementation of XY data.  It is optimized for fast storage of real-time data.
 /*! It provides fast (usually constant-time) lookups of the min and max values for each axis, which is important for plotting so that

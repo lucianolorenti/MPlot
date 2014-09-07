@@ -1,11 +1,11 @@
 #ifndef __MPlotWidget_H__
 #define __MPlotWidget_H__
 
-#include "MPlot/MPlot_global.h"
+#include "MPlot_global.h"
 
 #include <QGraphicsView>
 #include <QResizeEvent>
-#include "MPlot/MPlot.h"
+#include "MPlot.h"
 
 
 // TODO: test performance of:

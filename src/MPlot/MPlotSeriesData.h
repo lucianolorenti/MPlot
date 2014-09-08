@@ -49,8 +49,17 @@ public:
 	/// Return the x-value at index.  You can assume that \c index is valid (< count()).
 	virtual qreal x(unsigned index) const = 0;
 	/// Copy all the x values from \c indexStart to \c indexEnd (inclusive) into \c outputValues. You can assume that the indexes are valid.
-    virtual void xyValues(unsigned indexStart, unsigned indexEnd, QVector<qreal>& outputValuesX,QVector<qreal>&outputValuesY) const = 0;
-
+    virtual void xyValues(unsigned indexStart,
+                          unsigned indexEnd,
+                          unsigned int size,
+                          QVector<qreal>& outputValuesX,
+                          QVector<qreal>&outputValuesY) const = 0;
+    virtual void xyValues(unsigned indexStart,
+                          unsigned indexEnd,
+                          QVector<qreal>& outputValuesX,
+                          QVector<qreal>&outputValuesY) const {
+        xyValues(indexStart,indexEnd,indexEnd-indexStart+1,outputValuesX,outputValuesY);
+    }
 	/// Return the y-value at index.  You can assume that \c index is valid (< count()).
 	virtual qreal y(unsigned index) const = 0;
 
@@ -138,7 +147,10 @@ protected:
 public:
     MPlotVectorRefSeriesData(const QVector<T> & y);
     qreal x(unsigned index) const;
-    void xyValues(unsigned indexStart, unsigned indexEnd, QVector<qreal> &outputValuesX, QVector<qreal> &outputValuesY) const;
+    void xyValues(unsigned indexStart,
+                  unsigned indexEnd,
+                  unsigned width,
+                  QVector<qreal> &outputValuesX, QVector<qreal> &outputValuesY) const;
     qreal y(unsigned index) const;
     int count() const;
 
@@ -162,11 +174,13 @@ qreal MPlotVectorRefSeriesData<T>::x(unsigned index) const
 template <class T>
 void MPlotVectorRefSeriesData<T>::xyValues(unsigned indexStart,
                                            unsigned indexEnd,
+                                           unsigned int width,
                                            QVector<qreal> &outputValuesX,
                                            QVector<qreal> &outputValuesY) const
 {
     unsigned int idx = 0;
-    for (unsigned int i=indexStart;i<=indexEnd;i++) {
+    unsigned step = (indexEnd-indexStart+1)/(double)width;
+    for (unsigned int i=indexStart;i<=indexEnd;i+=step) {
         outputValuesX[idx] = i;
         outputValuesY[idx] = _yValues[i];
         idx++;
@@ -185,12 +199,12 @@ int MPlotVectorRefSeriesData<T>::count() const
 template <class T>
 qreal MPlotVectorRefSeriesData<T>::searchMinY() const
 {
-    return *std::min(_yValues.begin(),_yValues.end());
+    return *std::min_element(_yValues.begin(),_yValues.end());
 }
 template <class T>
 qreal MPlotVectorRefSeriesData<T>::searchMaxY() const
 {
-    return *std::max(_yValues.begin(),_yValues.end());
+    return *std::max_element(_yValues.begin(),_yValues.end());
 }
 template <class T>
 qreal MPlotVectorRefSeriesData<T>::searchMinX() const
@@ -222,7 +236,7 @@ public:
 
 	virtual qreal x(unsigned index) const;
     virtual qreal y(unsigned index) const;
-    virtual void xyValues(unsigned indexStart, unsigned indexEnd, QVector<qreal> &outputValuesX,QVector<qreal>&outputValuesY) const;
+    virtual void xyValues(unsigned indexStart, unsigned indexEnd, unsigned width, QVector<qreal> &outputValuesX, QVector<qreal>&outputValuesY) const;
 
 
 

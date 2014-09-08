@@ -150,8 +150,8 @@ protected:
 	/// Helper function to return a the transformed, normalized, offsetted x value. (Only call when model() is valid, and i<model().count()!)
 	qreal yy(unsigned i) const { return data_->y(i)*sy_+dy_+offset_.y(); }
 	/// Helper function that sets outputValues to a transformed, normalized, offsetted value.
-    void xxyyValues(unsigned start, unsigned end, QVector<qreal> &outputValuesX,QVector<qreal>&outputValuesY) const;
-
+    void xxyyValues(unsigned start, unsigned end, unsigned width, QVector<qreal> &outputValuesX, QVector<qreal>&outputValuesY) const;
+    void xxyyValues(unsigned start, unsigned end, QVector<qreal> &outputValuesX, QVector<qreal> &outputValuesY) const;
 
 	/// Helper function that sets a default look and feel to the plot.
 	virtual void setDefaults();
@@ -191,7 +191,8 @@ protected:
 
 	/// Receives signals for us, from MPlotAbstractSeriesData implementations
 	MPlotSeriesSignalHandler* signalHandler_;
-	friend class MPlotSeriesSignalHandler;
+    friend class MPlotSeriesSignalHandler;
+
 };
 
 

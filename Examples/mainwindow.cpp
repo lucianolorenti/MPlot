@@ -12,10 +12,11 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     _datos.resize(7);
+    unsigned int size = 4000000;
     for (unsigned int i=0;i<7;i++) {
-        _datos[i].resize(4000000);
-        for (unsigned int x=0;x<4000000;x++) {
-            _datos[i][x] = std::sin(x/500.0f) * 55;
+        _datos[i].resize(size);
+        for (unsigned int x=0;x<size;x++) {
+            _datos[i][x] = std::abs(std::sin(x/5.0f) * 55.0f);
         }
 
 
@@ -27,8 +28,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
         MPlot       * plot       = new MPlot();
         MPlotWidget * plotWindow = new MPlotWidget();
+        plot->axisScaleLeft()->setAutoScaleEnabled();
+        plot->axisScaleBottom()->setAutoScaleEnabled();
         plotWindow->setPlot(plot);
         plot->addItem(series);
+
         this->ui->centralWidget->layout()->addWidget(plotWindow);
     }
 

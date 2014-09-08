@@ -80,11 +80,17 @@ qreal MPlotRealtimeModel::y(unsigned index) const {
         return 0.0;
 }
 
-void MPlotRealtimeModel::xyValues(unsigned indexStart, unsigned indexEnd, QVector<qreal> &outputValuesX, QVector<qreal> &outputValuesY) const
+void MPlotRealtimeModel::xyValues(unsigned indexStart,
+                                  unsigned indexEnd,
+                                  unsigned width,
+                                  QVector<qreal> &outputValuesX,
+                                  QVector<qreal> &outputValuesY) const
 {
-    for(unsigned i=indexStart; i<=indexEnd; ++i) {
-        outputValuesX[i] = xval_[i];
-        outputValuesY[i] = yval_[i];
+    unsigned steps = (indexEnd-indexStart+1)/(double)width;
+    unsigned int c=0;
+    for(unsigned i=indexStart; i<=indexEnd; i+=steps) {
+        outputValuesX[c] = xval_[i];
+        outputValuesY[c++] = yval_[i];
     }
 }
 

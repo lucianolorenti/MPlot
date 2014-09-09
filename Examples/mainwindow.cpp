@@ -32,6 +32,11 @@ MainWindow::MainWindow(QWidget *parent) :
         plot->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0,50));
         plot->axisScaleBottom()->setDataRangeConstraint(MPlotAxisRange(0,_datos[i].size()));
         plot->axisScaleBottom()->setAutoScaleEnabled();
+         plot->setMarginTop(5);
+         plot->setMarginRight(5);
+         plot->setMarginLeft(5);
+         plot->setMarginBottom(5);
+
         plotWindow->setPlot(plot);
         plot->addItem(series);
 

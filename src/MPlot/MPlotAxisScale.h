@@ -207,6 +207,7 @@ public:
 		}
 	}
 
+
 	/// Returns the MPlotAxisRange of the axis scale but within the confines of the scene size.
 	MPlotAxisRange mapDataToDrawing(const MPlotAxisRange& dataRange) const {
 		return MPlotAxisRange(

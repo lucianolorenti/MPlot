@@ -170,9 +170,10 @@ public:
 private:
 		/// Bool holding whether the item is selectable and selected.
 	bool isSelected_, isSelectable_;
+protected:
 		/// The x and y axis scale for the plot item.
 	MPlotAxisScale* yAxisTarget_, *xAxisTarget_;
-
+private:
 		/// The plot that this item belongs to.
 	MPlot* plot_;
 

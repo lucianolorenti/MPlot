@@ -1,4 +1,4 @@
-#ifndef __MPlotSeries_CPP__
+﻿#ifndef __MPlotSeries_CPP__
 #define __MPlotSeries_CPP__
 
 #include "MPlot/MPlotSeries.h"
@@ -370,17 +370,16 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
         y.resize(datacount);
         xxyyValues(min, max, x,y);
 
-        QVector<qreal> mappedX = QVector<qreal>(x.size());
-        QVector<qreal> mappedY = QVector<qreal>(x.size());
-
-        mapXValues(mappedX.size(), x.constData(), mappedX.data());
-        mapYValues(mappedY.size(), y.constData(), mappedY.data());
+        for (unsigned int i=0;i<datacount;i++) {
+            //x[i] = xAxisTarget_->map(x[i]);
+            //y[i] = yAxisTarget_->map(y[i]);
+        }
 
         // should we just draw normally and quickly? Do that if the number of data points is less than the number of x-pixels in the drawing space (or half-pixels, in the conservative case where MPLOT_MAX_LINES_PER_PIXEL = 2).
         if(x.size() < xAxisTarget()->drawingSize().width()/xinc) {
 
             for (int i = 1, count = data_->count(); i < count; i++)
-                painter->drawLine(QPointF(mappedX.at(i-1), mappedY.at(i-1)), QPointF(mappedX.at(i), mappedY.at(i)));
+                painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
         }
 
         else {	// do sub-pixel simplification.
@@ -389,20 +388,20 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
             qreal xstart;
             qreal ystart, ymin, ymax;
 
-            xstart = mappedX.at(0);
-            ymin = ymax = ystart = mappedY.at(0);
+            xstart = x.at(0);
+            ymin = ymax = ystart = y.at(0);
 
             // move through the datapoints along x. (Note that x could be jumping forward or backward here... it's not necessarily sorted)
-            for(int i=1, count = mappedX.size(); i < count; i++) {
+            for(int i=1, count = x.size(); i < count; i++) {
 
                 // if within the range around xstart: update max/min to be representative of this range
-                if(fabs(mappedX.at(i) - xstart) < xinc) {
-                    qreal mappedYYI = mappedY.at(i);
+                if(fabs(x.at(i) - xstart) < xinc) {
+                    qreal yYI = y.at(i);
 
-                    if(mappedYYI > ymax)
-                        ymax = mappedYYI;
-                    if(mappedYYI < ymin)
-                        ymin = mappedYYI;
+                    if(yYI > ymax)
+                        ymax = yYI;
+                    if(yYI < ymin)
+                        ymin = yYI;
                 }
                 // otherwise draw the lines and move on to next range...
                 // The first line represents everything within the range [xstart, xstart+xinc).  Note that these will all be plotted at same x-pixel.
@@ -413,11 +412,11 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
                     if(ymin != ymax)
                         painter->drawLine(QPointF(xstart, ymin), QPointF(xstart, ymax));
 
-                    painter->drawLine(QPointF(mappedX.at(i-1), mappedY.at(i-1)), QPointF(mappedX.at(i), mappedY.at(i)));
+                    painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
                     //NOT: painter->drawLine(QPointF(xstart, ystart), QPointF(mapX(xx(i)), mapY(yy(i))));
 
-                    xstart = mappedX.at(i);
-                    ymin = ymax = ystart = mappedY.at(i);
+                    xstart = x.at(i);
+                    ymin = ymax = ystart = y.at(i);
                 }
             }
         }

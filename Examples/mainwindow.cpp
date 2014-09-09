@@ -4,7 +4,7 @@
 #include <MPlot/MPlot.h>
 #include <MPlot/MPlotSeriesData.h>
 #include <MPlot/MPlotSeries.h>
-
+#include <MPlot/MPlotTools.h>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -29,11 +29,22 @@ MainWindow::MainWindow(QWidget *parent) :
         MPlot       * plot       = new MPlot();
         MPlotWidget * plotWindow = new MPlotWidget();
         plot->axisScaleLeft()->setAutoScaleEnabled();
+        plot->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0,50));
+        plot->axisScaleBottom()->setDataRangeConstraint(MPlotAxisRange(0,_datos[i].size()));
         plot->axisScaleBottom()->setAutoScaleEnabled();
         plotWindow->setPlot(plot);
         plot->addItem(series);
 
         this->ui->centralWidget->layout()->addWidget(plotWindow);
+
+        // this tool adds mouse-wheel based zooming
+        MPlotDragZoomerTool * dzTool =new MPlotDragZoomerTool();
+        plot->addTool(dzTool);
+
+        MPlotWheelZoomerTool * wzTool = new MPlotWheelZoomerTool();
+        plot->addTool(wzTool);
+
+
     }
 
 

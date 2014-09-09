@@ -110,28 +110,21 @@ const MPlotAbstractSeriesData* MPlotAbstractSeries::model() const { return data_
 
 void MPlotAbstractSeries::xxyyValues(unsigned start,
                                      unsigned end,
-                                     unsigned width,
                                      QVector<qreal> &outputValuesX,
                                      QVector<qreal> &outputValuesY) const
 {
     qreal offset = offset_.x();
 
 
-    data_->xyValues(start, end, width,outputValuesX,outputValuesY);
+    data_->xyValues(start, end, outputValuesX,outputValuesY);
 
 
-    for (int i = 0; i < width; i++) {
+    for (int i = 0; i < outputValuesX.size(); i++) {
         outputValuesX[i] = outputValuesX[i]*sx_ + dx_ + offset;
         outputValuesY[i] = outputValuesY[i]*sy_ + dy_ + offset;
     }
 }
-void MPlotAbstractSeries::xxyyValues(unsigned start,
-                                     unsigned end,
-                                     QVector<qreal> &outputValuesX,
-                                     QVector<qreal> &outputValuesY) const
-{
-    xxyyValues(start,end,end-start+1,outputValuesX,outputValuesY);
-}
+
 
 
 // Required functions:
@@ -369,24 +362,13 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
         QVector<qreal> y;
         QTransform wt = painter->deviceTransform();	// equivalent to worldTransform and combinedTransform
         qreal xinc = 1.0 / wt.m11() / MPLOT_MAX_LINES_PER_PIXEL;	// will just be 1/MPLOT_MAX_LINES_PER_PIXEL = 0.5 as long as not using a scaled/transformed painter.
-        if (data_->count() < xAxisTarget()->drawingSize().width()/xinc) {
-            int dataCount = data_->count();
-            x = QVector<qreal>(dataCount);
-            y = QVector<qreal>(dataCount);
-
-            xxyyValues(0, data_->count()-1, x,y);
-        } else {
-            x = QVector<qreal>(xAxisTarget()->drawingSize().width()/xinc+1);
-            y = QVector<qreal>(xAxisTarget()->drawingSize().width()/xinc+1);
-            xxyyValues(0, data_->count()-1, xAxisTarget()->drawingSize().width()/xinc, x,y);
-        }
-
-        // xinc is the delta-x (in drawing coordinates, not plot coordinates) that corresponds to 1/MPLOT_MAX_LINES_PER_PIXEL pixel-widths on the device(screen).  It makes no sense to plot many points inside one delta-x. If the x-resolution of the data is so fine as to give us many points within one pixel-width, we optimize to draw no more than two carefully-placed lines within this vertical space... One covering the entire vertical extent of the data at this x-pixel, and one connecting the previous x-pixel to the next with the appropriate slope.
-
-
-
-
-
+        qreal width = xAxisTarget()->drawingSize().width()/xinc;
+        int min = std::max(this->xAxisTarget()->min(),(double)0) ;
+        int max =  std::min(this->xAxisTarget()->max(),(double)data_->count()) ;
+        int datacount = (width*2)+1;
+        x.resize(datacount);
+        y.resize(datacount);
+        xxyyValues(min, max, x,y);
 
         QVector<qreal> mappedX = QVector<qreal>(x.size());
         QVector<qreal> mappedY = QVector<qreal>(x.size());

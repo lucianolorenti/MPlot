@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (unsigned int i=0;i<7;i++) {
         _datos[i].resize(size);
         for (unsigned int x=0;x<size;x++) {
-            _datos[i][x] = std::abs(std::sin(x/5.0f) * 55.0f);
+            _datos[i][x] = std::abs(std::sin(x/300000.0f*i) * 55.0f);
         }
 
 
@@ -43,11 +43,14 @@ MainWindow::MainWindow(QWidget *parent) :
         this->ui->centralWidget->layout()->addWidget(plotWindow);
 
         // this tool adds mouse-wheel based zooming
-        MPlotDragZoomerTool * dzTool =new MPlotDragZoomerTool();
-        plot->addTool(dzTool);
+     //   MPlotDragZoomerTool * dzTool =new MPlotDragZoomerTool();
+     //   plot->addTool(dzTool);
 
         MPlotWheelZoomerTool * wzTool = new MPlotWheelZoomerTool();
         plot->addTool(wzTool);
+
+        MPlotDragTool        * dragTool = new MPlotDragTool();
+        plot->addTool(dragTool);
 
 
     }

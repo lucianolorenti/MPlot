@@ -165,7 +165,33 @@ protected:
 };
 
 
+class MPLOTSHARED_EXPORT MPlotDragTool : public MPlotAbstractTool {
+    Q_OBJECT
+public:
+    /// Constructor. By default, after adding to a plot, this tool will be active on all axes.  If you want to restrict which axes it zooms, call setAxisTargets() after it is added to the plot.
+    MPlotDragTool();
 
+
+signals:
+
+
+protected:
+
+    virtual void	mousePressEvent ( QGraphicsSceneMouseEvent * event );
+
+    /// Handles drag events, redraws the selection retangle to follow the mouse, and handles state transitions between dragStarted_ and dragInProgress_
+    virtual void	mouseMoveEvent ( QGraphicsSceneMouseEvent * event );
+
+    /// Handles release events. If a drag was in progress and the user lets go of the left button, zoom to the new rectangle and save the old one on the recall stack.  If the user lets go of the right button, this is a restore to a zoom position on the stack.
+    virtual void	mouseReleaseEvent ( QGraphicsSceneMouseEvent * event );
+
+    virtual void	wheelEvent ( QGraphicsSceneWheelEvent * event );
+    virtual void	mouseDoubleClickEvent ( QGraphicsSceneMouseEvent * event );
+
+    bool dragInProgress_;
+    qreal _prevX;
+
+};
 
 #include "MPlot/MPlotPoint.h"
 

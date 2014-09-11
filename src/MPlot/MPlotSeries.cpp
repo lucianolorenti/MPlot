@@ -371,8 +371,8 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
         xxyyValues(min, max, x,y);
 
         for (unsigned int i=0;i<datacount;i++) {
-            //x[i] = xAxisTarget_->map(x[i]);
-            //y[i] = yAxisTarget_->map(y[i]);
+            x[i] = this->mapX(x[i]);
+            y[i] = this->mapY(y[i]);
         }
 
         // should we just draw normally and quickly? Do that if the number of data points is less than the number of x-pixels in the drawing space (or half-pixels, in the conservative case where MPLOT_MAX_LINES_PER_PIXEL = 2).

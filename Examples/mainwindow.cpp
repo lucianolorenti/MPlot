@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (unsigned int i=0;i<7;i++) {
         _datos[i].resize(size);
         for (unsigned int x=0;x<size;x++) {
-            _datos[i][x] = std::abs(std::sin(x/300000.0f*i) * 55.0f);
+            _datos[i][x] = std::abs(std::sin(x/300000.0f*(i+1)) * 55.0f);
         }
 
 
@@ -32,8 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
         plot->axisScaleLeft()->setDataRangeConstraint(MPlotAxisRange(0,50));
         plot->axisScaleBottom()->setDataRangeConstraint(MPlotAxisRange(0,_datos[i].size()));
         plot->axisScaleBottom()->setAutoScaleEnabled();
-         plot->setMarginTop(5);
-         plot->setMarginRight(5);
+         plot->setMarginTop(6);
+         plot->setMarginRight(0);
          plot->setMarginLeft(5);
          plot->setMarginBottom(5);
 

@@ -2,8 +2,8 @@
 #include "ui_mainwindow.h"
 #include <MPlot/MPlotWidget.h>
 #include <MPlot/MPlot.h>
-#include <MPlot/MPlotSeriesData.h>
-#include <MPlot/MPlotSeries.h>
+#include <MPlot/SeriesData/MPlotVectorRefSeriesData.h>
+#include <MPlot/Series/MPlotSeriesBasic.h>
 #include <MPlot/MPlotTools.h>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

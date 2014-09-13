@@ -17,11 +17,9 @@ HEADERS += src/MPlot/MPlot_global.h \
 		src/MPlot/MPlot.h \
 		src/MPlot/MPlotLegend.h \
 		src/MPlot/MPlotMarker.h \
-		src/MPlot/MPlotSeriesData.h \
 		src/MPlot/MPlotTools.h \
 		src/MPlot/MPlotAbstractTool.h \
 		src/MPlot/MPlotItem.h \
-		src/MPlot/MPlotSeries.h \
 		src/MPlot/MPlotColorMap.h \
 		src/MPlot/MPlotImage.h \
 		src/MPlot/MPlotImageData.h \
@@ -30,7 +28,15 @@ HEADERS += src/MPlot/MPlot_global.h \
 		src/MPlot/MPlotRectangle.h \
 		src/MPlot/MPlotMarkerTransparentVerticalRectangle.h \
 		src/MPlot/MPlotColorLegend.h \
-    src/MPlot/MPlotImageRangeDialog.h
+    src/MPlot/MPlotImageRangeDialog.h \
+    src/MPlot/MPlotSignalHandler.h \
+    src/MPlot/MPlotAxisRange.h \
+    src/MPlot/SeriesData/MPlotVectorSeriesData.h \
+    src/MPlot/SeriesData/MPlotAbstractSeriesData.h \
+    src/MPlot/SeriesData/MPlotVectorRefSeriesData.h \
+    src/MPlot/SeriesData/MPlotRealtimeModel.h \
+    src/MPlot/Series/MPlotAbstractSeries.h \
+    src/MPlot/Series/MPlotSeriesBasic.h
 
 SOURCES += src/MPlot/MPlot.cpp \
 		src/MPlot/MPlotAbstractTool.cpp \
@@ -42,15 +48,19 @@ SOURCES += src/MPlot/MPlot.cpp \
 		src/MPlot/MPlotLegend.cpp \
 		src/MPlot/MPlotMarker.cpp \
 		src/MPlot/MPlotPoint.cpp \
-		src/MPlot/MPlotSeries.cpp \
-		src/MPlot/MPlotSeriesData.cpp \
 		src/MPlot/MPlotTools.cpp \
 		src/MPlot/MPlotWidget.cpp \
 		src/MPlot/MPlotAxisScale.cpp \
 		src/MPlot/MPlotRectangle.cpp \
 		src/MPlot/MPlotMarkerTransparentVerticalRectangle.cpp \
 		src/MPlot/MPlotColorLegend.cpp \
-    src/MPlot/MPlotImageRangeDialog.cpp
+    src/MPlot/MPlotImageRangeDialog.cpp \
+    src/MPlot/MPlotSignalHandler.cpp \
+    src/MPlot/SeriesData/MPlotVectorSeriesData.cpp \
+    src/MPlot/SeriesData/MPlotAbstractSeriesData.cpp \
+    src/MPlot/SeriesData/MPlotRealtimeModel.cpp \
+    src/MPlot/Series/MPlotAbstractSeries.cpp \
+    src/MPlot/Series/MPlotSeriesBasic.cpp
 
 # Location to install the library in. By default, we use the current folder (top-level MPlot). This needs to be an absolute path for the macx QMAKE_POST_LINK step to work.
 INSTALLBASE = $${PWD}

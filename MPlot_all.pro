@@ -4,7 +4,7 @@ SUBDIRS = MPlotLib \
             MPlotTest \
     Examples
 
-CONFIG += ordered
 
+Examples.depends = MPlotLib
 MPlotLib.file = MPlotLib.pro
 MPlotTest.file = MPlotTest.pro

@@ -12,7 +12,7 @@ DEPENDPATH += . \
 	src/MPlot
 
 INCLUDEPATH += include
-
+QMAKE_CXXFLAGS+=-std=c++11
 MPLOTLIBPATH = $${PWD}/lib
 LIBS += -L$${MPLOTLIBPATH} -lMPlot
 

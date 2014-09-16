@@ -8,10 +8,12 @@
 #include <QPainter>
 
 MPlotColorLegendSignalHandler::MPlotColorLegendSignalHandler(MPlotColorLegend *parent)
-	: QObject(0)
+    : QObject(0),
+      legend_(parent)
 {
-	legend_ = parent;
+
 }
+
 
 void MPlotColorLegendSignalHandler::onDataChanged()
 {
@@ -19,13 +21,19 @@ void MPlotColorLegendSignalHandler::onDataChanged()
 }
 
 MPlotColorLegend::MPlotColorLegend(MPlot *plot, QGraphicsItem *parent)
-	: QGraphicsItem(parent)
+    : QGraphicsItem(parent),
+      plot_(plot),
+      image_(0),
+      signalHandler_(new MPlotColorLegendSignalHandler(this))
 {
-	plot_ = plot;
-	image_ = 0;
-	signalHandler_ = new MPlotColorLegendSignalHandler(this);
 
-	setFlags(flags() | QGraphicsItem::ItemIsMovable);
+
+    setFlags(flags() | QGraphicsItem::ItemIsMovable);
+}
+
+MPlotColorLegend::~MPlotColorLegend()
+{
+
 }
 
 QRectF MPlotColorLegend::boundingRect() const
@@ -55,7 +63,7 @@ void MPlotColorLegend::paint(QPainter *painter, const QStyleOptionGraphicsItem *
 				return;
 
 			image_ = image;
-			QObject::connect(image_->model()->signalSource(), SIGNAL(dataChanged()), signalHandler_, SLOT(onDataChanged()));
+            QObject::connect(image_->model()->signalSource(), SIGNAL(dataChanged()), signalHandler_, SLOT(onDataChanged()));
 		}
 
 		MPlotInterval dataRange = image_->range();

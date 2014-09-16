@@ -43,14 +43,16 @@ void MPlotVectorRefSeriesData<T>::xyValues(unsigned indexStart,
                                            QVector<qreal> &outputValuesX,
                                            QVector<qreal> &outputValuesY) const
 {
-    unsigned int idx = 0;
-    unsigned step = ((indexEnd-indexStart+1)/((double)outputValuesX.size()-1)+1);
-    for (unsigned int i=indexStart;i<=indexEnd;i+=step) {
-        outputValuesX[idx] = i;
-        outputValuesY[idx] = _yValues[i];
-        idx++;
+    unsigned long int x = indexStart;
+    unsigned long step = std::floor((double)(indexEnd-indexStart+1)/((double)outputValuesX.length()));
+    for (unsigned long int i=0;i<outputValuesX.length();i++) {
+        outputValuesX[i] = x;
+        outputValuesY[i] = _yValues[x];
+        x+=step;
     }
+
 }
+
 template <class T>
 qreal MPlotVectorRefSeriesData<T>::y(unsigned index) const
 {

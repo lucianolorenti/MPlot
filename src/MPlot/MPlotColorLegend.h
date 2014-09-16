@@ -2,7 +2,7 @@
 #define MPLOTCOLORLEGEND_H
 
 #include "MPlot/MPlot_global.h"
-
+#include <memory>
 #include <QGraphicsItem>
 
 class MPlot;
@@ -17,6 +17,7 @@ class MPLOTSHARED_EXPORT MPlotColorLegendSignalHandler : public QObject
 protected:
 	/// Constructor.  Builds a signal handler for the MPlotImage object.
 	MPlotColorLegendSignalHandler(MPlotColorLegend *parent);
+
 	/// Giving access to the MPlotAbstractImage to the signal handler.
 	friend class MPlotColorLegend;
 
@@ -26,7 +27,7 @@ protected slots:
 
 protected:
 	/// Pointer to the image this signal handler manages.
-	MPlotColorLegend *legend_;
+    std::shared_ptr<MPlotColorLegend> legend_;
 };
 
 class MPLOTSHARED_EXPORT MPlotColorLegend : public QGraphicsItem
@@ -36,7 +37,7 @@ public:
 
 	/// Constructor.  Builds a colour legend for the given \param plot.  If there are multiple images stacked on top of each other then this might not be an accurate representation of the colour map.
 	MPlotColorLegend(MPlot *plot, QGraphicsItem *parent = 0);
-
+    virtual ~MPlotColorLegend();
 	/// Pure virtual implementation.  Bounding rectangle.
 	virtual QRectF boundingRect() const;
 	/// Pure virutal implementation.  The paint function.
@@ -65,7 +66,7 @@ protected:
 	QPoint topLeft_;
 
 	/// The signal hander for the image.
-	MPlotColorLegendSignalHandler* signalHandler_;
+    MPlotColorLegendSignalHandler* signalHandler_;
 	/// Friending the image handler so it has access to its methods.
 	friend class MPlotColorLegendSignalHandler;
 

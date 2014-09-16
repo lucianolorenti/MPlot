@@ -8,7 +8,7 @@ TARGET = MPlot
 TEMPLATE = lib
 QT +=widgets
 DEFINES += MPLOT_LIBRARY
-
+QMAKE_CXXFLAGS+=-std=c++11
 INCLUDEPATH += $${PWD}/src
 
 HEADERS += src/MPlot/MPlot_global.h \

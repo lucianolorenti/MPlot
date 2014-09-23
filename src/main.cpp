@@ -87,6 +87,7 @@
 	// plot.axisTop()->showTickLabels(true);
 
 
+
 	 // 13: Adding 2d data and Image plots:
 	 MPlotSimpleImageData data2d(QRectF(-0.5,-0.5,1,1), QSize(1024,1024));
 	 for(int yy=0; yy<1024; yy++) {
@@ -102,6 +103,7 @@
 	 MPlotImageBasic* plot2d = new MPlotImageBasic(&data2d);
      plot2d->setColorMap(MPlotColorMap::Jet);
 	 plot.addItem(plot2d);
+
 
 
 

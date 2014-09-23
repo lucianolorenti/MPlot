@@ -21,6 +21,8 @@ private:
     Ui::MainWindow *ui;
     void configurePlot(MPlot *plot);
     QVector<QVector<uint16_t>> _datos;
+    MPlot *_plots[7];
 };
+
 
 #endif // MAINWINDOW_H

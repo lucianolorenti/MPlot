@@ -26,7 +26,7 @@ void MPlotAxisScale::setOrientation(Qt::Orientation orientation)
 
 	emit drawingSizeAboutToChange();	// effective drawing size will change, because we're now using the opposite span (vertical instead of horizontal, or vice versa) for the scaling calculation.
 	orientation_ = orientation;
-	emit drawingSizeChanged();
+    emit drawingSizeChanged();
 }
 
 void MPlotAxisScale::setDrawingSize(const QSizeF &newSize)
@@ -94,7 +94,7 @@ void MPlotAxisScale::setDataRange(const MPlotAxisRange &newDataRange, bool apply
 		dataRange_ = MPlotAxisRange(dataRange_.max(), dataRange_.min());
 	}
 
-	emit dataRangeChanged();
+    emit dataRangeChanged(dataRange_);
 }
 
 void MPlotAxisScale::setPadding(qreal percent) {

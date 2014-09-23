@@ -255,7 +255,7 @@ signals:
 	/// Emitted before the data range (min and max data values displayed by the axis) changes.  This signal is emitted whenever the data range will change but the drawing size (physical extent of the axis in screen coordinates) will remain the same.
 	void dataRangeAboutToChange();
 	/// Emitted after the data range change is complete.
-	void dataRangeChanged();
+    void dataRangeChanged(const MPlotAxisRange & range);
 	/// Emitted when autoscaling is turned on or off.
 	void autoScaleEnabledChanged(bool autoScaleEnabled);
 

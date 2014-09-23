@@ -36,7 +36,8 @@ HEADERS += src/MPlot/MPlot_global.h \
     src/MPlot/SeriesData/MPlotVectorRefSeriesData.h \
     src/MPlot/SeriesData/MPlotRealtimeModel.h \
     src/MPlot/Series/MPlotAbstractSeries.h \
-    src/MPlot/Series/MPlotSeriesBasic.h
+    src/MPlot/Series/MPlotSeriesBasic.h \
+    src/MPlot/MPlotAxisChangeMediator.h
 
 SOURCES += src/MPlot/MPlot.cpp \
 		src/MPlot/MPlotAbstractTool.cpp \
@@ -60,7 +61,8 @@ SOURCES += src/MPlot/MPlot.cpp \
     src/MPlot/SeriesData/MPlotAbstractSeriesData.cpp \
     src/MPlot/SeriesData/MPlotRealtimeModel.cpp \
     src/MPlot/Series/MPlotAbstractSeries.cpp \
-    src/MPlot/Series/MPlotSeriesBasic.cpp
+    src/MPlot/Series/MPlotSeriesBasic.cpp \
+    src/MPlot/MPlotAxisChangeMediator.cpp
 
 # Location to install the library in. By default, we use the current folder (top-level MPlot). This needs to be an absolute path for the macx QMAKE_POST_LINK step to work.
 INSTALLBASE = $${PWD}

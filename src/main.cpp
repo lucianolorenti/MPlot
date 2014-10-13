@@ -1,8 +1,8 @@
 #include <QApplication>
 
 #include "MPlot/MPlotWidget.h"
-#include "MPlot/MPlotSeriesData.h"
-#include "MPlot/MPlotSeries.h"
+#include "MPlot/SeriesData/MPlotAbstractSeriesData.h"
+#include "MPlot/Series/MPlotSeriesBasic.h"
 
 #include "MPlot/MPlotImageData.h"
 #include "MPlot/MPlotImage.h"

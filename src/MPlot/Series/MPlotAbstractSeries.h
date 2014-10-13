@@ -3,7 +3,7 @@
 #include <QObject>
 #include <MPlot/MPlotItem.h>
 #include <MPlot/MPlotMarker.h>
-#include <MPlot/SeriesData/MPlotAbstractSeriesData.h>
+#include "../SeriesData/MPlotAbstractSeriesData.h"
 /// When the number of points exceeds this, we simply return the bounding box instead of the exact shape of the plot.  Makes selection less precise, but faster.
 #define MPLOT_EXACTSHAPE_POINT_LIMIT 10000
 

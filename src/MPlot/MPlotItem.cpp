@@ -119,7 +119,7 @@ void MPlotItem::setYAxisTarget(MPlotAxisScale *yAxisTarget)
 		   QObject::connect(yAxisTarget_, SIGNAL(drawingSizeAboutToChange()), signalSource_, SLOT(onAxisScaleAboutToChange()));
 		   QObject::connect(yAxisTarget_, SIGNAL(dataRangeAboutToChange()), signalSource_, SLOT(onAxisScaleAboutToChange()));
 		   QObject::connect(yAxisTarget_, SIGNAL(drawingSizeChanged()), signalSource_, SLOT(onAxisScaleChanged()));
-		   QObject::connect(yAxisTarget_, SIGNAL(dataRangeChanged()), signalSource_, SLOT(onAxisScaleChanged()));
+           QObject::connect(yAxisTarget_, SIGNAL(dataRangeChanged(MPlotAxisRange)), signalSource_, SLOT(onAxisScaleChanged()));
 	   }
 
 	   onAxisScaleChanged();
@@ -140,7 +140,7 @@ void MPlotItem::setXAxisTarget(MPlotAxisScale *xAxisTarget)
 		   QObject::connect(xAxisTarget_, SIGNAL(drawingSizeAboutToChange()), signalSource_, SLOT(onAxisScaleAboutToChange()));
 		   QObject::connect(xAxisTarget_, SIGNAL(dataRangeAboutToChange()), signalSource_, SLOT(onAxisScaleAboutToChange()));
 		   QObject::connect(xAxisTarget_, SIGNAL(drawingSizeChanged()), signalSource_, SLOT(onAxisScaleChanged()));
-		   QObject::connect(xAxisTarget_, SIGNAL(dataRangeChanged()), signalSource_, SLOT(onAxisScaleChanged()));
+           QObject::connect(xAxisTarget_, SIGNAL(dataRangeChanged(MPlotAxisRange)), signalSource_, SLOT(onAxisScaleChanged()));
 	   }
 
 	   onAxisScaleChanged();

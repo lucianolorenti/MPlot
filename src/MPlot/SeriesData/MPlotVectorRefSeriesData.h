@@ -45,7 +45,7 @@ void MPlotVectorRefSeriesData<T>::xyValues(unsigned indexStart,
 {
     unsigned long int x = indexStart;
     unsigned long step = std::floor((double)(indexEnd-indexStart+1)/((double)outputValuesX.length()));
-    for (unsigned long int i=0;i<outputValuesX.length();i++) {
+    for (long int i=0;i<outputValuesX.length();i++) {
         outputValuesX[i] = x;
         outputValuesY[i] = _yValues[x];
         x+=step;

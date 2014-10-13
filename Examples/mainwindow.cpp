@@ -48,11 +48,11 @@ MainWindow::MainWindow(QWidget *parent) :
         this->ui->centralWidget->layout()->addWidget(plotWindow);
 
         // this tool adds mouse-wheel based zooming
-        //MPlotDragZoomerTool * dzTool =new MPlotDragZoomerTool();
-        //plot->addTool(dzTool);
+        MPlotDragZoomerTool * dzTool =new MPlotDragZoomerTool();
+        plot->addTool(dzTool);
 
-        MPlotWheelZoomerTool * wzTool = new MPlotWheelZoomerTool();
-        plot->addTool(wzTool);
+       // MPlotWheelZoomerTool * wzTool = new MPlotWheelZoomerTool();
+        //plot->addTool(wzTool);
 
 //
        //  MPlotDragTool        * dragTool = new MPlotDragTool();

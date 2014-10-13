@@ -18,7 +18,7 @@ MPlotAxis::MPlotAxis(MPlotAxisScale* scale, Placement placement, const QString& 
 	connect(axisScale_, SIGNAL(drawingSizeAboutToChange()), this, SLOT(onAxisDrawingSizeAboutToChange()));
 	connect(axisScale_, SIGNAL(drawingSizeChanged()), this, SLOT(onAxisDrawingSizeChanged()));
 	connect(axisScale_, SIGNAL(dataRangeAboutToChange()), this, SLOT(onAxisDataRangeAboutToChange()));
-	connect(axisScale_, SIGNAL(dataRangeChanged()), this, SLOT(onAxisDataRangeChanged()));
+    connect(axisScale_, SIGNAL(dataRangeChanged(MPlotAxisRange)), this, SLOT(onAxisDataRangeChanged()));
 	name_ = name;
 
 	axisNameFontU_.setPixelSize(12);

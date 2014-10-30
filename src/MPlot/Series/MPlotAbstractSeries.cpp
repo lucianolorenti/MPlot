@@ -36,12 +36,8 @@ MPlotAbstractSeries::MPlotAbstractSeries() :
 
 MPlotAbstractSeries::~MPlotAbstractSeries() {
     // If we have a model, need to disconnect from its updates before we get deleted.
-    if(data_) {
-        QObject::disconnect(data_->signalSource(), 0, signalHandler_, 0);
-        if(ownsModel_) {
-            delete data_;
-            data_ = 0;
-        }
+    if(data_.get()) {
+        QObject::disconnect(data_->signalSource(), 0, signalHandler_, 0);        
     }
     delete signalHandler_;
     signalHandler_ = 0;
@@ -69,11 +65,10 @@ void MPlotAbstractSeries::setMarker(MPlotMarkerShape::Shape shape, qreal size, c
 }
 
 // Sets this series to view the model in 'data';
-void MPlotAbstractSeries::setModel(const MPlotAbstractSeriesData* data, bool ownsModel) {
+void MPlotAbstractSeries::setModel(const std::shared_ptr<const MPlotAbstractSeriesData> & data) {
 
     // efficiency check: if new model is the same one as old model, don't change anything.
-    if(data == data_) {
-        ownsModel_ = ownsModel;
+    if(data.get() == data_.get()) {
         return;
     }
 
@@ -81,14 +76,12 @@ void MPlotAbstractSeries::setModel(const MPlotAbstractSeriesData* data, bool own
 
     // If there was an old model, disconnect old signals.  Delete the old model if ownsModel_ was set.
     if(data_) {
-        QObject::disconnect(data_->signalSource(), 0, signalHandler_, 0);
-        if(ownsModel_)
-            delete data_;
+        QObject::disconnect(data_->signalSource(), 0, signalHandler_, 0);        
     }
 
     // new data from here:
-    data_ = data;
-    ownsModel_ = ownsModel;
+    data_=data;
+
 
     dataChangedUpdateNeeded_ = true;
     prepareGeometryChange();
@@ -103,7 +96,7 @@ void MPlotAbstractSeries::setModel(const MPlotAbstractSeriesData* data, bool own
 
 }
 
-const MPlotAbstractSeriesData* MPlotAbstractSeries::model() const { return data_; }
+const std::shared_ptr<const MPlotAbstractSeriesData>& MPlotAbstractSeries::model() const { return data_; }
 
 void MPlotAbstractSeries::xxyyValues(unsigned start,
                                      unsigned end,

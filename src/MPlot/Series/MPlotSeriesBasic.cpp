@@ -4,7 +4,7 @@
 // MPlotSeriesBasic
 ////////////////////////////
 
-MPlotSeriesBasic::MPlotSeriesBasic(const MPlotAbstractSeriesData* data)
+MPlotSeriesBasic::MPlotSeriesBasic(const std::shared_ptr<MPlotAbstractSeriesData> data)
     : MPlotAbstractSeries() {
 
     // Set style defaults:
@@ -83,7 +83,7 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
         qreal width = xAxisTarget()->drawingSize().width()/xinc;
         int min = std::max(this->xAxisTarget()->min(),(double)0) ;
         int max =  std::min(this->xAxisTarget()->max(),(double)data_->count()) ;
-        unsigned int datacount = (width*2)+1;
+        unsigned int datacount = width+1;
         x.resize(datacount);
         y.resize(datacount);
         xxyyValues(min, max, x,y);

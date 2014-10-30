@@ -8,11 +8,11 @@ template <class T>
 class MPLOTSHARED_EXPORT MPlotVectorRefSeriesData : public MPlotAbstractSeriesData {
 
 protected:
-    const QVector<T> & _yValues;
+    const T & _yValues;
 
     // MPlotAbstractSeriesData interface
 public:
-    MPlotVectorRefSeriesData(const QVector<T> & y);
+    MPlotVectorRefSeriesData(const T & y);
     qreal x(unsigned index) const;
     void xyValues(unsigned indexStart,
                   unsigned indexEnd,
@@ -27,7 +27,7 @@ protected:
     qreal searchMaxX() const;
 };
 template <class T>
-MPlotVectorRefSeriesData<T>::MPlotVectorRefSeriesData(const QVector<T> & y) :
+MPlotVectorRefSeriesData<T>::MPlotVectorRefSeriesData(const T &y) :
     _yValues(y)
 {
 
@@ -81,6 +81,6 @@ qreal MPlotVectorRefSeriesData<T>::searchMinX() const
 template <class T>
 qreal MPlotVectorRefSeriesData<T>::searchMaxX() const
 {
-    return _yValues.count();
+    return _yValues.size();
 }
 #endif // MPLOTVECTORREFSERIESDATA_H

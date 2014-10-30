@@ -26,7 +26,7 @@ class MPLOTSHARED_EXPORT MPlotSeriesBasic : public MPlotAbstractSeries {
 
 public:
     /// Constructor.  Builds a series of data.  This is a standard 1D line plot.
-    MPlotSeriesBasic(const MPlotAbstractSeriesData* data = 0);
+    MPlotSeriesBasic(const std::shared_ptr<MPlotAbstractSeriesData> data );
     /// Destructor.
     virtual ~MPlotSeriesBasic();
 

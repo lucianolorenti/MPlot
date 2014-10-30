@@ -1,5 +1,6 @@
 #ifndef MPLOTABSTRACTSERIES_H
 #define MPLOTABSTRACTSERIES_H
+#include <memory>
 #include <QObject>
 #include <MPlot/MPlotItem.h>
 #include <MPlot/MPlotMarker.h>
@@ -70,10 +71,10 @@ public:
 
 
     /// Sets this series to view the model in 'data'.  If the series should take ownership of the model (ie: delete the model when it gets deleted), set \c ownsModel to true. (If a model was previously set with \c ownsModel = true, then this function will delete the old model.)
-    virtual void setModel(const MPlotAbstractSeriesData* data, bool ownsModel = false);
+    virtual void setModel(const std::shared_ptr<const MPlotAbstractSeriesData> &data);
 
     /// Returns the data model used to draw the series.
-    virtual const MPlotAbstractSeriesData* model() const;
+    virtual const std::shared_ptr<const MPlotAbstractSeriesData> &model() const;
 
     /// Re-implemented from MPlotItem to provide our line color as the legend color:
     virtual QBrush legendColor() const { return QBrush(linePen_.color()); }
@@ -156,7 +157,7 @@ protected:
     QString name_;
 
     /// Holds the data model for the series.
-    const MPlotAbstractSeriesData* data_;
+    std::shared_ptr<const MPlotAbstractSeriesData> data_;
     /// Bool holding whether or not this series owns the data model or not.
     bool ownsModel_;
 

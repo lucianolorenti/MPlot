@@ -5,7 +5,8 @@
 ////////////////////////////
 
 MPlotSeriesBasic::MPlotSeriesBasic(const std::shared_ptr<MPlotAbstractSeriesData> data)
-    : MPlotAbstractSeries() {
+    : MPlotAbstractSeries(),
+      _subsample(false){
 
     // Set style defaults:
     setDefaults();
@@ -76,6 +77,7 @@ void MPlotSeriesBasic::paint(QPainter* painter,
 void MPlotSeriesBasic::paintLines(QPainter* painter) {
 
     if(data_ && data_->count() > 0) {
+        QVector<qreal> xNotMapped;
         QVector<qreal> x;
         QVector<qreal> y;
         QTransform wt = painter->deviceTransform();	// equivalent to worldTransform and combinedTransform
@@ -83,25 +85,36 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
         qreal width = xAxisTarget()->drawingSize().width()/xinc;
         int min = std::max(this->xAxisTarget()->min(),(double)0) ;
         int max =  std::min(this->xAxisTarget()->max(),(double)data_->count()) ;
-        unsigned int datacount = width+1;
+        unsigned int datacount;
+        if (this->_subsample) {
+            datacount = width;
+        } else {
+            datacount = data_->count();
+        }
+        xNotMapped.resize(datacount);
         x.resize(datacount);
         y.resize(datacount);
-        xxyyValues(min, max, x,y);
+        xxyyValues(min, max, xNotMapped,y);
 
         for (unsigned int i=0;i<datacount;i++) {
-            x[i] = this->mapX(x[i]);
+            x[i] = this->mapX(xNotMapped[i]);
             y[i] = this->mapY(y[i]);
         }
 
-        // should we just draw normally and quickly? Do that if the number of data points is less than the number of x-pixels in the drawing space (or half-pixels, in the conservative case where MPLOT_MAX_LINES_PER_PIXEL = 2).
+        // should we just draw normally and quickly?
+        // Do that if the number of data points is less than the number of x-pixels
+        // in the drawing space (or half-pixels, in the conservative case where MPLOT_MAX_LINES_PER_PIXEL = 2).
         if(x.size() < xAxisTarget()->drawingSize().width()/xinc) {
-
-            for (int i = 1, count = data_->count(); i < count; i++)
+            for (int i = 1, count = x.count(); i < count; i++) {
+                painter->setPen(this->getPenFor(xNotMapped.at(i)));
                 painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
-        }
-
-        else {	// do sub-pixel simplification.
-            // Instead of drawing lines between all these data points, we'll just plot the max and min value within every xinc range.  This ensures that if there is noise/jumps within a subsample (xinc) range, we'll still see it on the plot.
+            }
+        } else {
+            // do sub-pixel simplification.
+            // Instead of drawing lines between all these data points,
+            // we'll just plot the max and min value within every xinc range.
+            // This ensures that if there is noise/jumps within a subsample (xinc) range,
+            // we'll still see it on the plot.
 
             qreal xstart;
             qreal ystart, ymin, ymax;
@@ -109,10 +122,12 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
             xstart = x.at(0);
             ymin = ymax = ystart = y.at(0);
 
-            // move through the datapoints along x. (Note that x could be jumping forward or backward here... it's not necessarily sorted)
+            // move through the datapoints along x.
+            // (Note that x could be jumping forward or backward here. Tt's not necessarily sorted)
             for(int i=1, count = x.size(); i < count; i++) {
 
-                // if within the range around xstart: update max/min to be representative of this range
+                // if within the range around xstart:
+                // update max/min to be representative of this range
                 if(fabs(x.at(i) - xstart) < xinc) {
                     qreal yYI = y.at(i);
 
@@ -120,18 +135,21 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
                         ymax = yYI;
                     if(yYI < ymin)
                         ymin = yYI;
-                }
-                // otherwise draw the lines and move on to next range...
-                // The first line represents everything within the range [xstart, xstart+xinc).  Note that these will all be plotted at same x-pixel.
-                // The second line connects this range to the next.  Note that (if the x-axis point spacing is not uniform) x(i) may be many pixels from xstart, to the left or right. All we know is that it's outside of our 1px range. If it _is_ far outside the range, to get the slope of the connecting line correct, we need to connect it to the last point preceding it. The point (x_(i-1), y_(i-1)) is within the 1px range [xstart, x_(i-1)] represented by the vertical line.
-                // (Brain hurt? imagine a simple example: (0,2) (0,1) (0,0), (5,0).  It should be a vertical line from (0,2) to (0,0), and then a horizontal line from (0,0) to (5,0).  The xinc range is from i=0 (xstart = x(0)) to i=2. The point outside is i=3.
-                // For normal/small datasets where the x-point spacing is >> pixel spacing , what will happen is ymax = ymin = ystart (all the same point), and (x(i), y(i)) is the next point.
-                else {
+                } else {
+                    // otherwise draw the lines and move on to next range.
+                    // The first line represents everything within the range [xstart, xstart+xinc).
+                    // Note that these will all be plotted at same x-pixel.
+                    // The second line connects this range to the next.
+                    // Note that (if the x-axis point spacing is not uniform) x(i) may be many pixels from xstart,
+                    // to the left or right. All we know is that it's outside of our 1px range. If it _is_ far outside the range, to get the slope of the connecting line correct, we need to connect it to the last point preceding it. The point (x_(i-1), y_(i-1)) is within the 1px range [xstart, x_(i-1)] represented by the vertical line.
+                    // (Brain hurt? imagine a simple example: (0,2) (0,1) (0,0), (5,0).  It should be a vertical line from (0,2) to (0,0), and then a horizontal line from (0,0) to (5,0).  The xinc range is from i=0 (xstart = x(0)) to i=2. The point outside is i=3.
+                    // For normal/small datasets where the x-point spacing is >> pixel spacing , what will happen is ymax = ymin = ystart (all the same point), and (x(i), y(i)) is the next point.
+
                     if(ymin != ymax)
                         painter->drawLine(QPointF(xstart, ymin), QPointF(xstart, ymax));
 
                     painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
-                    //NOT: painter->drawLine(QPointF(xstart, ystart), QPointF(mapX(xx(i)), mapY(yy(i))));
+                    ;
 
                     xstart = x.at(i);
                     ymin = ymax = ystart = y.at(i);
@@ -181,4 +199,14 @@ void MPlotSeriesBasic::setSelected(bool selected) {
 // All the specific re-drawing we need to do when the data changes (or a new model is set) is contained in update().
 void MPlotSeriesBasic::onDataChanged() {
     update();
+}
+
+QPen MPlotSeriesBasic::getPenFor(const qreal x)
+{
+    return QPen();
+}
+
+void MPlotSeriesBasic::setSubsample(bool b)
+{
+    _subsample = true;
 }

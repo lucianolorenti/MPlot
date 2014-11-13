@@ -43,7 +43,7 @@ void MPlotRealtimeModel::xyValues(unsigned indexStart,
 {
     unsigned steps = (indexEnd-indexStart+1)/(double)outputValuesX.size();
     unsigned int c=0;
-    for(unsigned i=indexStart; i<=indexEnd; i+=steps) {
+    for(unsigned i=std::max((int)indexStart-1,0); i<=std::min((int)indexEnd+1,(int)outputValuesX.size()); i+=steps) {
         outputValuesX[c] = xval_[i];
         outputValuesY[c++] = yval_[i];
     }

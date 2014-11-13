@@ -9,7 +9,7 @@
 /// When drawing large datasets, we won't draw more than MPLOT_MAX_LINES_PER_PIXEL lines per x-axis pixel.
 /// We sub-sample by plotting only the maximum and minimum values over the x-axis increment that corresponds to 1px.
 /// The value that makes sense here is 1 (since you can't see any more... they would just look like vertical lines on top of each other anyway.)  When drawing anti-aliased, changing this to 2 makes smoother plots.
-#define MPLOT_MAX_LINES_PER_PIXEL 2.0
+#define MPLOT_MAX_LINES_PER_PIXEL 1.0
 
 /// If you're going to add a lot of points to the model (without caring about updates in between), recommend this for performance reasons:
 /*!
@@ -48,12 +48,18 @@ public:
     /// re-implemented from MPlotItem base to draw an update if we're now selected (with our selection highlight)
     virtual void setSelected(bool selected = true);
 
+    void setSubsample(bool b);
+
 protected: //"slots"
 
     /// Handle implementation-specific drawing updates
     virtual void onDataChanged();
 
 protected:
+    /// Subsample SeriesData
+    bool _subsample;
+
+    QPen getPenFor(const qreal x);
 
     /// Customize this if needed for MPlotSeries. For now we use the parent class implementation
     /*

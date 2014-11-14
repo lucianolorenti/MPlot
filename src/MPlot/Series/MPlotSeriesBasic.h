@@ -2,7 +2,7 @@
 #define MPLOTSERIESBASIC_H
 
 #include "MPlotAbstractSeries.h"
-
+#include <functional>
 
 
 
@@ -60,6 +60,8 @@ protected:
     bool _subsample;
 
     QPen getPenFor(const qreal x);
+
+    std::function<QPen(qreal)> _qpenFunction;
 
     /// Customize this if needed for MPlotSeries. For now we use the parent class implementation
     /*

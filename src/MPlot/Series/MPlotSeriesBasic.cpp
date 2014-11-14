@@ -203,7 +203,12 @@ void MPlotSeriesBasic::onDataChanged() {
 
 QPen MPlotSeriesBasic::getPenFor(const qreal x)
 {
-    return QPen();
+    //return QPen();
+   if (_qpenFunction) {
+       return _qpenFunction(x);
+   } else {
+       return selectedPen_;
+   }
 }
 
 void MPlotSeriesBasic::setSubsample(bool b)

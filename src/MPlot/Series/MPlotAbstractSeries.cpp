@@ -212,6 +212,7 @@ void	MPlotAbstractSeries::onDataChangedPrivate() {
     onDataChanged();
 }
 
+
 void MPlotAbstractSeries::setDefaults() {
 
     setLinePen(QPen(QColor(Qt::red)));	// Red solid lines on plot

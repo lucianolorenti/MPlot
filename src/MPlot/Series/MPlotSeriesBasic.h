@@ -59,9 +59,6 @@ protected:
     /// Subsample SeriesData
     bool _subsample;
 
-    QPen getPenFor(const qreal x);
-
-    std::function<QPen(qreal)> _qpenFunction;
 
     /// Customize this if needed for MPlotSeries. For now we use the parent class implementation
     /*

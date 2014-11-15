@@ -137,6 +137,8 @@ protected: // "slots"
     virtual void onDataChanged() = 0;
 
 protected:
+
+
     /// Helper function to return a the transformed, normalized, offsetted x value. (Only call when model() is valid, and i<model().count()!)
     qreal xx(unsigned i) const { return data_->x(i)*sx_+dx_+offset_.x(); }
     /// Helper function to return a the transformed, normalized, offsetted x value. (Only call when model() is valid, and i<model().count()!)

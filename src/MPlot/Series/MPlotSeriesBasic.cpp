@@ -1,5 +1,6 @@
 #include "MPlotSeriesBasic.h"
 #include <QDebug>
+#include <iostream>
 /////////////////////////////
 // MPlotSeriesBasic
 ////////////////////////////
@@ -77,9 +78,7 @@ void MPlotSeriesBasic::paint(QPainter* painter,
 void MPlotSeriesBasic::paintLines(QPainter* painter) {
 
     if(data_ && data_->count() > 0) {
-        QVector<qreal> xNotMapped;
-        QVector<qreal> x;
-        QVector<qreal> y;
+        QVector<qreal> xNotMapped,yNotMapped,x,y;
         QTransform wt = painter->deviceTransform();	// equivalent to worldTransform and combinedTransform
         qreal xinc = 1.0 / wt.m11() / MPLOT_MAX_LINES_PER_PIXEL;	// will just be 1/MPLOT_MAX_LINES_PER_PIXEL = 0.5 as long as not using a scaled/transformed painter.
         qreal width = xAxisTarget()->drawingSize().width()/xinc;
@@ -92,13 +91,14 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
             datacount = data_->count();
         }
         xNotMapped.resize(datacount);
+        yNotMapped.resize(datacount);
         x.resize(datacount);
         y.resize(datacount);
-        xxyyValues(min, max, xNotMapped,y);
+        xxyyValues(min, max, xNotMapped,yNotMapped);
 
         for (unsigned int i=0;i<datacount;i++) {
             x[i] = this->mapX(xNotMapped[i]);
-            y[i] = this->mapY(y[i]);
+            y[i] = this->mapY(yNotMapped[i]);
         }
 
         // should we just draw normally and quickly?
@@ -106,8 +106,12 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
         // in the drawing space (or half-pixels, in the conservative case where MPLOT_MAX_LINES_PER_PIXEL = 2).
         if(x.size() < xAxisTarget()->drawingSize().width()/xinc) {
             for (int i = 1, count = x.count(); i < count; i++) {
-                painter->setPen(this->getPenFor(xNotMapped.at(i)));
-                painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
+                if (yNotMapped[i-1] < 40) {
+                    painter->setPen(QPen(QColor(0,15,255)));
+                } else {
+                    painter->setPen(this->linePen_);
+                }
+               painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
             }
         } else {
             // do sub-pixel simplification.
@@ -145,11 +149,11 @@ void MPlotSeriesBasic::paintLines(QPainter* painter) {
                     // (Brain hurt? imagine a simple example: (0,2) (0,1) (0,0), (5,0).  It should be a vertical line from (0,2) to (0,0), and then a horizontal line from (0,0) to (5,0).  The xinc range is from i=0 (xstart = x(0)) to i=2. The point outside is i=3.
                     // For normal/small datasets where the x-point spacing is >> pixel spacing , what will happen is ymax = ymin = ystart (all the same point), and (x(i), y(i)) is the next point.
 
-                    if(ymin != ymax)
+                    if(ymin != ymax) {
                         painter->drawLine(QPointF(xstart, ymin), QPointF(xstart, ymax));
+                    }
+                     painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
 
-                    painter->drawLine(QPointF(x.at(i-1), y.at(i-1)), QPointF(x.at(i), y.at(i)));
-                    ;
 
                     xstart = x.at(i);
                     ymin = ymax = ystart = y.at(i);
@@ -201,15 +205,7 @@ void MPlotSeriesBasic::onDataChanged() {
     update();
 }
 
-QPen MPlotSeriesBasic::getPenFor(const qreal x)
-{
-    //return QPen();
-   if (_qpenFunction) {
-       return _qpenFunction(x);
-   } else {
-       return selectedPen_;
-   }
-}
+
 
 void MPlotSeriesBasic::setSubsample(bool b)
 {

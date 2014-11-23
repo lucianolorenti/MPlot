@@ -317,7 +317,7 @@ void MPlotAxis::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 			if(tickLabelsVisible_) {
 				painter->setPen(axisPen_);
 				QRectF labelBox = QRectF(QPointF(x,tickTop-tickLabelOffset_), QSizeF(0,0));
-				painter->drawText(labelBox, Qt::AlignBottom | Qt::AlignHCenter | Qt::TextDontClip, QString::number(tickValue));
+                painter->drawText(labelBox, Qt::AlignBottom | Qt::AlignHCenter | Qt::TextDontClip, prepareLabel_(tickValue));
 			}
 
 			// draw the gridline
@@ -379,7 +379,7 @@ void MPlotAxis::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 				painter->setPen(axisPen_);
 				QRectF labelBox = QRectF(QPointF(tickLeft-tickLabelOffset_,y), QSizeF(0,0));
 				QRectF actualLabelBox;
-				painter->drawText(labelBox, Qt::AlignRight | Qt::AlignVCenter | Qt::TextDontClip, QString::number(tickValue), &actualLabelBox);
+                painter->drawText(labelBox, Qt::AlignRight | Qt::AlignVCenter | Qt::TextDontClip, prepareLabel_(tickValue), &actualLabelBox);
 				if(actualLabelBox.width() > maxLabelWidth)
 					maxLabelWidth = actualLabelBox.width();
 			}
@@ -446,7 +446,7 @@ void MPlotAxis::paint(QPainter* painter, const QStyleOptionGraphicsItem* option,
 				painter->setPen(axisPen_);
 				QRectF labelBox = QRectF(QPointF(tickRight+tickLabelOffset_,y), QSizeF(0,0));
 				QRectF actualLabelBox;
-				painter->drawText(labelBox, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip, QString::number(tickValue), &actualLabelBox);
+                painter->drawText(labelBox, Qt::AlignLeft | Qt::AlignVCenter | Qt::TextDontClip, prepareLabel_(tickValue), &actualLabelBox);
 				if(actualLabelBox.width() > maxLabelWidth)
 					maxLabelWidth = actualLabelBox.width();
 			}
@@ -597,6 +597,8 @@ void MPlotAxis::setDefaults() {
 		gridVisible_ = true;
 	else
 		gridVisible_ = false;
+
+    this->prepareLabel_ = [](qreal v) { return QString::number(v); };
 }
 
 void MPlotAxis::setAxisScale(MPlotAxisScale *newScale)
@@ -672,13 +674,19 @@ QString MPlotAxis::formatTickLabel(double tickValue)
 		// significance is, let's say, 8 orders of magnitude below the full range
 		qreal significance = (rangeMax - rangeMin) / 1e8; //ex: range is (-0.5, 0.5)... significance = 1e-8
 
-		qreal truncated = round(tickValue/significance) * significance;
-		return QString::number(truncated);
+        qreal truncated = round(tickValue/significance) * significance;
+        return prepareLabel_(truncated);
 	}
 	else {
-		return QString::number(tickValue);
+        return prepareLabel_(tickValue);
 	}
 }
+
+void MPlotAxis::setPrepareLabel(const std::function<QString (qreal v)> &prepareLabel)
+{
+    prepareLabel_ = prepareLabel;
+}
+
 
 #endif
 

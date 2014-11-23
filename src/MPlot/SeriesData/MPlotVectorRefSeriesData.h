@@ -5,7 +5,7 @@
 #include "MPlotAbstractSeriesData.h"
 
 template <class T>
-class MPLOTSHARED_EXPORT MPlotVectorRefSeriesData : public MPlotAbstractSeriesData {
+class  MPlotVectorRefSeriesData : public MPlotAbstractSeriesData {
 
 protected:
     const T & _yValues;

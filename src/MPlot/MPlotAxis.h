@@ -7,7 +7,7 @@
 class QPainter;
 #include <QFont>
 #include <QPen>
-
+#include <functional>
 class MPlotAxisScale;
 
 /// Graphics item which draws a coordinate axis.  In most cases this class does not need to be used directly; it's used by MPlot to draw the plot axes.
@@ -84,9 +84,12 @@ public:
 		return
 	}*/
 
+
+    void setPrepareLabel(const std::function<QString (qreal v)> &prepareLabel);
+
 public slots:
-	/// Call to update the axis when the drawing size changes.
-	void onAxisDrawingSizeAboutToChange() { prepareGeometryChange(); }
+    /// Call to update the axis when the drawing size changes.
+    void onAxisDrawingSizeAboutToChange() { prepareGeometryChange(); }
 	/// Method that actually tells the axis to be repainted because the size has been changed.
 	void onAxisDrawingSizeChanged() { scaleFontsRequired_ = true; update(); }
 	/// Call to update the axis when the data range changes.
@@ -142,6 +145,7 @@ protected:
 
 	/// Flags that a re-computation of the font sizes needs to happen (due to changing a font, or changing the drawing size)
 	mutable bool scaleFontsRequired_;
-};
 
+    std::function<QString(qreal v)> prepareLabel_;
+};
 #endif

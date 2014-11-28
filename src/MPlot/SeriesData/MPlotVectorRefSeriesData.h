@@ -44,7 +44,7 @@ void MPlotVectorRefSeriesData<T>::xyValues(unsigned indexStart,
                                            QVector<qreal> &outputValuesY) const
 {
     unsigned long int x = indexStart;
-    unsigned long step = max((unsigned long)std::floor((double)(indexEnd-indexStart+1)/((double)outputValuesX.length())),(unsigned long)1);
+    unsigned long step = std::max((unsigned long)std::floor((double)(indexEnd-indexStart+1)/((double)outputValuesX.length())),(unsigned long)1);
     for (long int i=0;i<outputValuesX.length();i++) {
         outputValuesX[i] = x;
         outputValuesY[i] = _yValues[x];

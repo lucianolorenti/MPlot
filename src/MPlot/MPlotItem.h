@@ -15,7 +15,7 @@
 /// The opacity level (0=transparent, 1=opaque) of selection rectangles:
 #define MPLOT_SELECTION_OPACITY 0.35
 /// This is the width of selection highlight lines
-#define MPLOT_SELECTION_LINEWIDTH 10
+#define MPLOT_SELECTION_LINEWIDTH 3
 
 class MPlot;
 #include "MPlot/MPlotAxisScale.h"
